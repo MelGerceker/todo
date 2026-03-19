@@ -3,20 +3,16 @@
 
     internal class TaskManager
     {
-        public Task?[] taskList;
+        public List<Task> taskList;
 
-        public int idPointer = 0;
+        public int idPointer = 1;
         private readonly ITodoRepository repo;
 
-        public TaskManager(int maxTodoItemCount, ITodoRepository repo)
-        {
-            taskList = new Task[maxTodoItemCount];
-            this.repo = repo;
-        }
 
         public TaskManager(ITodoRepository repo)
         {
-            taskList = new Task[10];
+            taskList= new List<Task>();
+
             this.repo = repo;
         }
 
@@ -59,12 +55,24 @@
                         break;
 
                     case "delete":
-                        int id = int.Parse(input.Split(" ")[1]); //FIX: give outofbounds exception when id not given
+                        if(input.Split(" ").Length < 2)
+                        {
+                            Console.WriteLine("You need to provide an ID for this action");
+                            break;
+                        }
+
+                        int id = int.Parse(input.Split(" ")[1]);
                         Console.WriteLine("You have chosen to delete a task");
                         DeleteTask(id);
                         break;
 
                     case "update":
+                        if (input.Split(" ").Length < 2)
+                        {
+                            Console.WriteLine("You need to provide an ID for this action");
+                            break;
+                        }
+
                         int id2 = int.Parse(input.Split(" ")[1]);
                         Console.WriteLine("You have chosen to update a task");
                         UpdateTask(id2);
@@ -82,7 +90,7 @@
         public void ViewTasks()
         {
             Console.WriteLine("Here are your tasks:");
-            for (int i = 0; i < taskList.Length; i++)
+            for (int i = 0; i < taskList.Count; i++)
             {
                 if (taskList[i] is not null)
                 {
@@ -101,9 +109,6 @@
 
         public void CreateTask()
         {
-            //TODO: need to add max number of tasks reached!!
-
-             //test repo
 
             Console.WriteLine("Enter task title.");
             string? title = Console.ReadLine();
@@ -124,45 +129,58 @@
                 return;
             }
 
-            repo.Save(new Task("title", DateTime.Now, 1));
+            //test repo
+            //repo.Save(new Task("title", DateTime.Now, 1));
 
-            idPointer++;
-
-            taskList[idPointer - 1] = new Task(title, deadline, idPointer);
+            taskList.Add(new Task(title, deadline, idPointer));
 
             Console.WriteLine("You have created {0}-{1}, with the deadline {2:dd/MM/yyyy}", idPointer, title, deadline);
 
+            //NOTE: can use ToString("D") for id formatting, can add 0 padding.
 
-            //TODO: look at a way to display 000, 001, instead of 1 digit for id
+            idPointer++;
 
-            //TODO: since i chose an array, i can add a variable emptyPointer
-            // it would point to the first deleted task and when creating a new task check if emptyPointer is null first
         }
 
         public void DeleteTask(int taskID)
         {
-            if (taskID > taskList.Length || taskID < 1)
+            if (taskID > taskList.Count || taskID < 1)
+            {
+                Console.WriteLine("Task with that ID does not exist");
+                return;
+            }
+
+            for (int id=0; id< taskList.Count; id++)
+            {
+                if (taskList[id].id == taskID)
+                {
+                    Task? currentTask = taskList[id];
+
+                    if (currentTask is null)
+                    {
+                        Console.WriteLine("Task with that ID does not exist");
+                        return;
+                    }
+
+                    taskList.RemoveAt(id);
+                    Console.WriteLine("Task {0}-{1} has been deleted", taskID, currentTask.title);
+
+                    break;
+                }
+            }
+
+
+        }
+
+        public void UpdateTask(int taskID)
+        {
+            if(taskID > taskList.Count || taskID < 1)
             {
                 Console.WriteLine("Task with that ID does not exist");
                 return;
             }
 
             Task? currentTask = taskList[taskID - 1];
-
-            taskList[taskID - 1] = null; //better way to delete the object itself?
-
-            if (currentTask is null)
-            {
-                Console.WriteLine("Task with that ID does not exist");
-                return;
-            }
-
-            Console.WriteLine("Task {0}-{1} has been deleted", taskID, currentTask.title);
-        }
-
-        public void UpdateTask(int taskID)
-        {
-            Task? currentTask = taskList[taskID - 1]; //FIX: outofbounds exception
 
             if (currentTask is null)
             {

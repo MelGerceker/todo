@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\20242732\\source\\repos\\Udemy1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\taskmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\taskmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,6 +13,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\itodorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\itodorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,11 +30,28 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Task.cs",
+              "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Task.cs",
+              "RelativeDocumentMoniker": "Udemy1\\Task.cs",
+              "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Task.cs",
+              "RelativeToolTip": "Udemy1\\Task.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T22:29:19.999Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
               "$type": "Bookmark",
@@ -38,7 +59,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "ITodoRepository.cs",
               "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\ITodoRepository.cs",
               "RelativeDocumentMoniker": "Udemy1\\ITodoRepository.cs",
@@ -51,7 +72,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "database.txt",
               "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\database.txt",
               "RelativeDocumentMoniker": "Udemy1\\database.txt",
@@ -64,20 +85,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "TaskManager.cs",
               "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\TaskManager.cs",
               "RelativeDocumentMoniker": "Udemy1\\TaskManager.cs",
               "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\TaskManager.cs",
               "RelativeToolTip": "Udemy1\\TaskManager.cs",
-              "ViewState": "AgIAAJ8AAAAAAAAAAAAkwKQAAABSAAAAAAAAAA==",
+              "ViewState": "AgIAALUAAAAAAAAAAAAswCwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-21T23:25:54.241Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Program.cs",
               "RelativeDocumentMoniker": "Udemy1\\Program.cs",

@@ -21,16 +21,9 @@ namespace Udemy1
             this.id = id;
         }
 
-
     }
 
 
 }
 
-// task
-
-//progress: not started, in progress, complete (enums)
-//deadline
-//dependency
-//task description
 
