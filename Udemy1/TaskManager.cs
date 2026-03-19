@@ -1,142 +1,185 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Udemy1
+﻿namespace Udemy1
 {
 
     internal class TaskManager
     {
-        public string action;
-        public Task[] taskList = new Task[10];
+        public Task?[] taskList;
 
         public int idPointer = 0;
+        private readonly ITodoRepository repo;
 
-
-        public TaskManager()
+        public TaskManager(int maxTodoItemCount, ITodoRepository repo)
         {
-            start();
-
+            taskList = new Task[maxTodoItemCount];
+            this.repo = repo;
         }
 
-        public void start()
+        public TaskManager(ITodoRepository repo)
+        {
+            taskList = new Task[10];
+            this.repo = repo;
+        }
+
+        public void Start()
         {
             Console.WriteLine("--------------------------------------------------------------------------------------");
             Console.WriteLine("Welcome to your Task Manager. Write the action you want to perform (with ID if needed)");
             Console.WriteLine("--------------------------------------------------------------------------------------");
-            Console.WriteLine("1. Create");
-            Console.WriteLine("2. Update Task");
-            Console.WriteLine("3. View");
-            Console.WriteLine("4. Delete Task");
 
-            String input = Console.ReadLine();
-            action = input.Split(" ")[0];
+            string action;
 
-
-            switch (action)
+            while (true)
             {
-                case "create":
-                    Console.WriteLine("You have chosen to create a new task.");
-                    createTask();
+                Console.WriteLine("1. Create");
+                Console.WriteLine("2. Update");
+                Console.WriteLine("3. View");
+                Console.WriteLine("4. Delete");
+                Console.WriteLine("5. Exit");
 
-                    start();
-                    break;
+                string? input = Console.ReadLine();
 
-                case "view":
-                    Console.WriteLine("You have chosen to view tasks");
-                    viewTasks();
-                    start();
-                    break;
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Input cannot be empty");
+                    return;
+                }
 
-                case "delete":
-                    int id = int.Parse(input.Split(" ")[1]);
-                    Console.WriteLine("You have chosen to delete a task");
-                    deleteTask(id);
-                    break;
+                action = input.Split(" ")[0].ToLower();
 
-                case "update":
-                    int id2 = int.Parse(input.Split(" ")[1]);
-                    Console.WriteLine("You have chosen to update a task");
-                    updateTask(id2);
-                    start();
-                    break;
+                switch (action)
+                {
+                    case "create":
+                        Console.WriteLine("You have chosen to create a new task.");
+                        CreateTask();
+                        break;
 
+                    case "view":
+                        Console.WriteLine("You have chosen to view tasks");
+                        ViewTasks();
+                        break;
 
-                default:
-                    Console.WriteLine("Action is not available.");
-                    start();
-                    break;
+                    case "delete":
+                        int id = int.Parse(input.Split(" ")[1]); //FIX: give outofbounds exception when id not given
+                        Console.WriteLine("You have chosen to delete a task");
+                        DeleteTask(id);
+                        break;
+
+                    case "update":
+                        int id2 = int.Parse(input.Split(" ")[1]);
+                        Console.WriteLine("You have chosen to update a task");
+                        UpdateTask(id2);
+                        break;
+                    case "exit":
+                        return;
+
+                    default:
+                        Console.WriteLine("Action is not available.");
+                        break;
+                }
             }
         }
 
-        public void viewTasks()
+        public void ViewTasks()
         {
             Console.WriteLine("Here are your tasks:");
             for (int i = 0; i < taskList.Length; i++)
             {
-                if (taskList[i] != null)
+                if (taskList[i] is not null)
                 {
-                    Console.WriteLine("{0}-{1}, deadline: {2:dd/MM/yyyy}", taskList[i].id, taskList[i].title, taskList[i].deadline);
+                    var task = taskList[i];
+
+                    if (task is null)
+                    {
+                        Console.WriteLine("Task with that ID does not exist");
+                        return;
+                    }
+
+                    Console.WriteLine("{0}-{1}, deadline: {2:dd/MM/yyyy}", task.id, task.title, task.deadline);
                 }
             }
-        }   
+        }
 
-        public void createTask()
+        public void CreateTask()
         {
             //TODO: need to add max number of tasks reached!!
 
-            Console.WriteLine("Enter task title.");
-            String title = Console.ReadLine();
-            Console.WriteLine("Enter task deadline.");
-            DateTime deadline = DateTime.Parse(Console.ReadLine());
-            int id = idPointer + 1;
+             //test repo
 
-            taskList[idPointer] = new Task(title, deadline,id);
+            Console.WriteLine("Enter task title.");
+            string? title = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(title))
+            {
+                Console.WriteLine("");
+                return;
+            }
+
+            Console.WriteLine("Enter task deadline.");
+
+            string? deadlineInput = Console.ReadLine();
+
+            if (!DateTime.TryParse(deadlineInput, out DateTime deadline))
+            {
+                Console.WriteLine("Wrong datetime format.");
+                return;
+            }
+
+            repo.Save(new Task("title", DateTime.Now, 1));
+
             idPointer++;
 
-            Console.WriteLine("You have created {0}-{1}, with the deadline {2:dd/MM/yyyy}", id, title, deadline);
+            taskList[idPointer - 1] = new Task(title, deadline, idPointer);
+
+            Console.WriteLine("You have created {0}-{1}, with the deadline {2:dd/MM/yyyy}", idPointer, title, deadline);
 
 
             //TODO: look at a way to display 000, 001, instead of 1 digit for id
 
             //TODO: since i chose an array, i can add a variable emptyPointer
             // it would point to the first deleted task and when creating a new task check if emptyPointer is null first
-
-
         }
 
-
-
-        public void deleteTask(int taskID)
+        public void DeleteTask(int taskID)
         {
-
-            Task currentTask = taskList[taskID-1];
-
-            taskList[taskID-1] = null; //better way to delete the object itself?
-
-            System.Console.WriteLine("Task {0}-{1} has been deleted", taskID, currentTask.title);
-
-
-        }
-
-        public void updateTask(int taskID)
-        {
-            Task currentTask = taskList[taskID - 1];
-
-            if (currentTask == null)
+            if (taskID > taskList.Length || taskID < 1)
             {
-                System.Console.WriteLine("Task with that ID does not exist");
+                Console.WriteLine("Task with that ID does not exist");
+                return;
+            }
+
+            Task? currentTask = taskList[taskID - 1];
+
+            taskList[taskID - 1] = null; //better way to delete the object itself?
+
+            if (currentTask is null)
+            {
+                Console.WriteLine("Task with that ID does not exist");
+                return;
+            }
+
+            Console.WriteLine("Task {0}-{1} has been deleted", taskID, currentTask.title);
+        }
+
+        public void UpdateTask(int taskID)
+        {
+            Task? currentTask = taskList[taskID - 1]; //FIX: outofbounds exception
+
+            if (currentTask is null)
+            {
+                Console.WriteLine("Task with that ID does not exist");
                 return;
             }
 
             Console.WriteLine("Write title or deadline depending on what you want to change");
-            String change = Console.ReadLine();
+            var change = Console.ReadLine();
             Console.WriteLine("Write new value");
-            String newVal = Console.ReadLine();
+            var newVal = Console.ReadLine();
 
+            if (string.IsNullOrEmpty(change) || string.IsNullOrEmpty(newVal))
+            {
+                Console.WriteLine("Input cannot be empty");
+                return;
+            }
 
             switch (change)
             {
@@ -147,6 +190,12 @@ namespace Udemy1
                     }
                 case ("deadline"):
                     {
+                        if (!DateTime.TryParse(newVal, out DateTime deadline))
+                        {
+                            Console.WriteLine("Wrong datetime format.");
+                            return;
+                        }
+
                         currentTask.deadline = DateTime.Parse(newVal);
                         break;
                     }
@@ -159,4 +208,49 @@ namespace Udemy1
         }
 
     }
+
+    internal class TodoDatabaseRepository : ITodoRepository
+    {
+        public void Save(Task task)
+        {
+            
+        }
+
+        public void Delete(int id)
+        {
+        }
+
+        public void Update(Task task)
+        {
+        }
+
+        public Task Get(int id)
+        {
+            return new Task("title", DateTime.Now, id);
+        }
+    }
+
+    internal class TodoTxtRepository : ITodoRepository
+    {
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(Task task)
+        {
+            
+        }
+
+        public void Update(Task task)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

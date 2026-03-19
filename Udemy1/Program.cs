@@ -1,5 +1,4 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System.Runtime.InteropServices;
 using System.Text;
 using Udemy1;
 
@@ -34,5 +33,12 @@ Console.Title = "Mel's Console";
 DateTime currentDate = DateTime.Now;
 Console.WriteLine("{0,86:dd/MM/yyyy HH:mm:ss}", currentDate);
 
-TaskManager tm = new TaskManager();
-tm.start();
+var tm = new TaskManager(new TodoDatabaseRepository());
+tm.Start();
+
+
+// v2
+// Convert to List
+
+// v3
+// implement file repository for database
