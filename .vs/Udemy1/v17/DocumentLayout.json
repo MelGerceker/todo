@@ -7,20 +7,12 @@
       "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\taskmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\itodorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\itodorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\database.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\database.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|c:\\users\\20242732\\source\\repos\\udemy1\\udemy1\\itodorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A304D19-E619-47E6-9411-132E53038F77}|Udemy1\\Udemy1.csproj|solutionrelative:udemy1\\itodorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,21 +22,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Task.cs",
-              "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Task.cs",
-              "RelativeDocumentMoniker": "Udemy1\\Task.cs",
-              "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Task.cs",
-              "RelativeToolTip": "Udemy1\\Task.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T22:29:19.999Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -59,28 +38,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ITodoRepository.cs",
               "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\ITodoRepository.cs",
               "RelativeDocumentMoniker": "Udemy1\\ITodoRepository.cs",
               "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\ITodoRepository.cs",
               "RelativeToolTip": "Udemy1\\ITodoRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T22:09:38.345Z",
+              "WhenOpened": "2026-03-21T18:06:13.757Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "database.txt",
               "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\database.txt",
               "RelativeDocumentMoniker": "Udemy1\\database.txt",
               "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\database.txt",
               "RelativeToolTip": "Udemy1\\database.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-03-15T14:56:28.262Z",
+              "WhenOpened": "2026-03-21T17:53:53.694Z",
               "EditorCaption": ""
             },
             {
@@ -91,22 +70,9 @@
               "RelativeDocumentMoniker": "Udemy1\\TaskManager.cs",
               "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\TaskManager.cs",
               "RelativeToolTip": "Udemy1\\TaskManager.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAEwE0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABABAAAAAAAAAAAAAAkBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-21T23:25:54.241Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Program.cs",
-              "RelativeDocumentMoniker": "Udemy1\\Program.cs",
-              "ToolTip": "C:\\Users\\20242732\\source\\repos\\Udemy1\\Udemy1\\Program.cs",
-              "RelativeToolTip": "Udemy1\\Program.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAcwB4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T00:50:28.618Z",
               "EditorCaption": ""
             }
           ]

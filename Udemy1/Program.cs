@@ -2,17 +2,12 @@
 using System.Text;
 using Udemy1;
 
-
 //Some notes from the udemy course: ----------------------------
 
 //ReadKey() function
 
-//Console.WriteLine("{0,20}", 123);
-
-
 // OR is ||
 // AND is &&
-
 
 
 int[,] matrix = new int[3, 2] { { 1, 2 }, { 2, 3 }, { 3, 4 } };
@@ -33,7 +28,7 @@ Console.Title = "Mel's Console";
 DateTime currentDate = DateTime.Now;
 Console.WriteLine("{0,86:dd/MM/yyyy HH:mm:ss}", currentDate);
 
-var tm = new TaskManager(new TodoDatabaseRepository());
+var tm = new TaskManager(new TodoTxtRepository());
 tm.Start();
 
 

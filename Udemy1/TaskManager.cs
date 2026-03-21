@@ -1,4 +1,7 @@
-﻿namespace Udemy1
+﻿using System.IO;
+using System.Text;
+
+namespace Udemy1
 {
 
     internal class TaskManager
@@ -7,6 +10,7 @@
 
         public int idPointer = 1;
         private readonly ITodoRepository repo;
+        private readonly string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "database.txt");
 
 
         public TaskManager(ITodoRepository repo)
@@ -14,6 +18,9 @@
             taskList= new List<Task>();
 
             this.repo = repo;
+
+            File.WriteAllText(path, "Id|||Title||Deadline\n");
+            //Console.WriteLine(Path.GetFullPath(path));
         }
 
         public void Start()
@@ -129,14 +136,13 @@
                 return;
             }
 
-            //test repo
-            //repo.Save(new Task("title", DateTime.Now, 1));
-
             taskList.Add(new Task(title, deadline, idPointer));
 
             Console.WriteLine("You have created {0}-{1}, with the deadline {2:dd/MM/yyyy}", idPointer, title, deadline);
 
             //NOTE: can use ToString("D") for id formatting, can add 0 padding.
+
+            repo.Save(new Task(title, deadline, idPointer));
 
             idPointer++;
 
@@ -144,11 +150,13 @@
 
         public void DeleteTask(int taskID)
         {
-            if (taskID > taskList.Count || taskID < 1)
+            if (taskID < 1)
             {
                 Console.WriteLine("Task with that ID does not exist");
                 return;
             }
+
+            repo.Delete(taskID);
 
             for (int id=0; id< taskList.Count; id++)
             {
@@ -161,6 +169,7 @@
                         Console.WriteLine("Task with that ID does not exist");
                         return;
                     }
+
 
                     taskList.RemoveAt(id);
                     Console.WriteLine("Task {0}-{1} has been deleted", taskID, currentTask.title);
@@ -250,9 +259,41 @@
 
     internal class TodoTxtRepository : ITodoRepository
     {
-        public void Delete(int id)
+
+        private readonly string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "database.txt");
+
+        public void Delete(int taskID)
         {
-            throw new NotImplementedException();
+            // how to find the task in the file?
+            //id is unque but title may have numbers so look for ||| after the id
+            
+            var lines = File.ReadAllLines(path).ToList();
+            string? lineToDelete = null;
+
+            foreach (var line in lines)
+            {
+                string readID = line.Split("|||")[0];
+
+                if (readID == taskID.ToString())
+                {
+                    Console.WriteLine("Found line to delete: " + line);
+                    lineToDelete = line;
+                    break;
+
+                }
+            }
+
+            if (lineToDelete is null)
+            {
+                Console.WriteLine("Task with that ID does not exist");
+                return;
+            }
+            else
+            {
+                lines.Remove(lineToDelete);
+                File.WriteAllLines(path, lines);
+            }
+
         }
 
         public Task Get(int id)
@@ -262,7 +303,9 @@
 
         public void Save(Task task)
         {
-            
+            string taskString = $"{task.id}|||{task.title}||{task.deadline:dd/MM/yyyy}\n";
+            File.AppendAllText(path, taskString);
+
         }
 
         public void Update(Task task)
