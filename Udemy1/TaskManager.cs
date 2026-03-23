@@ -7,25 +7,22 @@ namespace Udemy1
 
     internal class TaskManager
     {
-        public List<Task> taskList;
 
-        public int idPointer = 1;
+        //public int idPointer = 1;
         private readonly ITodoRepository repo;
         private readonly string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "database.txt");
 
 
         public TaskManager(ITodoRepository repo)
         {
-            taskList= new List<Task>(); //initialization can be simplified?
 
             this.repo = repo;
 
             if (!File.Exists(path))
             {
-                File.Create(path); // should i call close()
+                File.Create(path);
 
                 File.WriteAllText(path, "Id|||Title||Deadline\n");
-                //Console.WriteLine(Path.GetFullPath(path));
             }
         }
 
@@ -103,21 +100,8 @@ namespace Udemy1
         public void ViewTasks()
         {
             Console.WriteLine("Here are your tasks:");
-            for (int i = 0; i < taskList.Count; i++)
-            {
-                if (taskList[i] is not null)
-                {
-                    var task = taskList[i];
+            repo.ViewAll();
 
-                    if (task is null)
-                    {
-                        Console.WriteLine("Task with that ID does not exist");
-                        return;
-                    }
-
-                    Console.WriteLine("{0}-{1}, deadline: {2:dd/MM/yyyy}", task.id, task.title, task.deadline);
-                }
-            }
         }
 
         public void CreateTask()
@@ -142,15 +126,7 @@ namespace Udemy1
                 return;
             }
 
-            taskList.Add(new Task(title, deadline, idPointer));
-
-            Console.WriteLine("You have created {0}-{1}, with the deadline {2:dd/MM/yyyy}", idPointer, title, deadline);
-
-            //NOTE: can use ToString("D") for id formatting, can add 0 padding.
-
-            repo.Save(new Task(title, deadline, idPointer));
-
-            idPointer++;
+            repo.Save(new Task(title, deadline,0));
 
         }
 
@@ -161,43 +137,20 @@ namespace Udemy1
                 Console.WriteLine("Task with that ID does not exist");
                 return;
             }
-            // SOLID
-            // single responsibility
 
             repo.Delete(taskID);
-
-            for (int id=0; id< taskList.Count; id++)
-            {
-                if (taskList[id].id == taskID)
-                {
-                    Task? currentTask = taskList[id];
-
-                    if (currentTask is null)
-                    {
-                        Console.WriteLine("Task with that ID does not exist");
-                        return;
-                    }
-
-
-                    taskList.RemoveAt(id);
-                    Console.WriteLine("Task {0}-{1} has been deleted", taskID, currentTask.title);
-
-                    break;
-                }
-            }
-
 
         }
 
         public void UpdateTask(int taskID)
         {
-            if(taskID > taskList.Count || taskID < 1)
+            if(taskID < 1)
             {
                 Console.WriteLine("Task with that ID does not exist");
                 return;
             }
 
-            Task? currentTask = taskList[taskID - 1];
+            var currentTask = repo.Get(taskID);
 
             if (currentTask is null)
             {
@@ -241,7 +194,6 @@ namespace Udemy1
             }
 
             repo.Update(currentTask);
-            //when i call update here, do i have to check for null/try parse again?
 
         }
     }
@@ -252,6 +204,8 @@ namespace Udemy1
 
         private readonly List<Task> taskList = [];
 
+        private int idPointer = 1;
+
         public TodoTxtRepository(string databaseFilePath)
         {
             path = databaseFilePath;
@@ -260,6 +214,9 @@ namespace Udemy1
 
         public IReadOnlyCollection<Task> Tasks => taskList.AsReadOnly();
 
+        /// <summary>
+        /// Reads all lines in file and parse all fields of a task. Add each task to taskList.
+        /// </summary>
         private void LoadTasks()
         {
             var lines = File.ReadAllLines(path).ToList();
@@ -274,6 +231,9 @@ namespace Udemy1
             }
         }
 
+        /// <summary>
+        /// Saves all tasks found in taskList to file.
+        /// </summary>
         private void SaveAllTasks()
         {
             var lines = new List<string>();
@@ -289,22 +249,10 @@ namespace Udemy1
 
         public void Delete(int taskID)
         {
-            // how to find the task in the file?
-            //id is unque but title may have numbers so look for ||| after the id
 
             Task? foundedTask = null;
-            // first approach
-            //foreach (var item in taskList)
-            //{
-            //    if(item.id == taskID)
-            //    {                     
-            //        Console.WriteLine("Found task to delete: " + item.title);
-            //        foundedTask = item;
-            //        break;
-            //    }
-            //}
 
-            // second approach with linq
+            //approach with linq
             foundedTask = taskList.FirstOrDefault(item => item.id == taskID);
 
             if (foundedTask is null)
@@ -314,19 +262,15 @@ namespace Udemy1
             }
             else
             {
+                Console.WriteLine("Task {0}-{1} has been deleted", taskID, foundedTask.title);
                 taskList.Remove(foundedTask);
                 SaveAllTasks();
             }
 
         }
 
-        /// <summary>
-        /// list all tasks or just get one by id?
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Task? Get(int id) 
+
+        public Task? Get(int id)
         {
             return taskList.First(task => task.id == id);
         }
@@ -339,81 +283,33 @@ namespace Udemy1
 
             updatedTask.title = task.title;
             updatedTask.deadline = task.deadline;
+            Console.WriteLine("You have updated {0}-{1}, with the deadline {2:dd/MM/yyyy}", updatedTask.id, updatedTask.title, updatedTask.deadline);
+
             SaveAllTasks();
 
-            // update 5
-            // title
-            // value from console
-            /*
-            var t1 = Get(5);
-            if(t1 is null)
-            {
-                Console.WriteLine("Not found");
-            }
-
-            var command = Console.ReadLine();
-            
-
-            var newValue = Console.ReadLine();
-
-            if (command?.ToLowerInvariant() == "title")
-            {
-                t1.title = newValue;
-            }
-            else
-            {
-                t1.deadline = DateTime.Parse(newValue);
-            }
-
-            Update(t1);
-            */
-
-            /*
-
-            var lines = File.ReadAllLines(path).ToList();
-
-            foreach (var line in lines)
-            {
-                string readID = line.Split("|||")[0];
-
-                if (readID == task.id.ToString())
-                {
-                    Console.WriteLine("Found line to change: " + line);
-
-                    lines.Remove(line);
-                    File.WriteAllLines(path, lines);
-                    break;
-
-                }
-            }
-
-            switch (change)
-            {
-                case ("title"):
-                    {
-                        File.WriteAllText(path, $"{task.id}|||{newVal}||{task.deadline:dd/MM/yyyy}\n", Encoding.UTF8);
-                        File.WriteAllLines(path, lines);
-
-                        break;
-                    }
-                case ("deadline"):
-                    {
-                        File.WriteAllText(path, $"{task.id}|||{task.title}||{newVal:dd/MM/yyyy}\n", Encoding.UTF8);
-                        File.WriteAllLines(path, lines);
-
-                        break;
-                    }
-                default:
-                    Console.WriteLine("Invalid input");
-                    break;
-            }
-            */
         }
 
+        //TODO: idPointer not saved when program finishes exe.
         public void Save(Task task)
         {
-           taskList.Add(task);
+            task.id = idPointer;
+            taskList.Add(task);
+            idPointer++;
             SaveAllTasks();
+            Console.WriteLine("You have created {0}-{1}, with the deadline {2:dd/MM/yyyy}", task.id, task.title, task.deadline);
+
+        }
+
+        /// <summary>
+        /// Prints all tasks in taskList with taskid, title, and deadline.
+        /// </summary>
+        public void ViewAll()
+        {
+            foreach (var task in taskList)
+            {
+                Console.WriteLine("{0}-{1}, deadline: {2:dd/MM/yyyy}", task.id, task.title, task.deadline);
+            }
+
         }
     }
 

@@ -7,5 +7,7 @@
         Task? Get(int id);
         void Save(Task task);
         void Update(Task task);
+
+        void ViewAll();
     }
 }
