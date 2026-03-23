@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Reflection;
 using System.Text;
 using Udemy1;
 
@@ -28,7 +29,12 @@ Console.Title = "Mel's Console";
 DateTime currentDate = DateTime.Now;
 Console.WriteLine("{0,86:dd/MM/yyyy HH:mm:ss}", currentDate);
 
-var tm = new TaskManager(new TodoTxtRepository());
+Assembly assembly = Assembly.GetExecutingAssembly();
+var location = assembly.Location;
+
+var filePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "database.txt");
+
+var tm = new TaskManager(new TodoTxtRepository(filePath));
 tm.Start();
 
 

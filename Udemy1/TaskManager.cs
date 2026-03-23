@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Udemy1
 {
@@ -15,12 +16,17 @@ namespace Udemy1
 
         public TaskManager(ITodoRepository repo)
         {
-            taskList= new List<Task>();
+            taskList= new List<Task>(); //initialization can be simplified?
 
             this.repo = repo;
 
-            File.WriteAllText(path, "Id|||Title||Deadline\n");
-            //Console.WriteLine(Path.GetFullPath(path));
+            if (!File.Exists(path))
+            {
+                File.Create(path); // should i call close()
+
+                File.WriteAllText(path, "Id|||Title||Deadline\n");
+                //Console.WriteLine(Path.GetFullPath(path));
+            }
         }
 
         public void Start()
@@ -155,6 +161,8 @@ namespace Udemy1
                 Console.WriteLine("Task with that ID does not exist");
                 return;
             }
+            // SOLID
+            // single responsibility
 
             repo.Delete(taskID);
 
@@ -232,85 +240,180 @@ namespace Udemy1
 
             }
 
-        }
+            repo.Update(currentTask);
+            //when i call update here, do i have to check for null/try parse again?
 
-    }
-
-    internal class TodoDatabaseRepository : ITodoRepository
-    {
-        public void Save(Task task)
-        {
-            
-        }
-
-        public void Delete(int id)
-        {
-        }
-
-        public void Update(Task task)
-        {
-        }
-
-        public Task Get(int id)
-        {
-            return new Task("title", DateTime.Now, id);
         }
     }
 
     internal class TodoTxtRepository : ITodoRepository
     {
+        private readonly string path;
 
-        private readonly string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "database.txt");
+        private readonly List<Task> taskList = [];
+
+        public TodoTxtRepository(string databaseFilePath)
+        {
+            path = databaseFilePath;
+            LoadTasks();
+        }
+
+        public IReadOnlyCollection<Task> Tasks => taskList.AsReadOnly();
+
+        private void LoadTasks()
+        {
+            var lines = File.ReadAllLines(path).ToList();
+            for (int i = 1; i < lines.Count; i++)
+            {
+                var line = lines[i];
+                var splitLine = line.Split("||");
+                int id = int.Parse(splitLine[0]);
+                string title = splitLine[1];
+                DateTime deadline = DateTime.Parse(splitLine[2]);
+                taskList.Add(new Task(title, deadline, id));
+            }
+        }
+
+        private void SaveAllTasks()
+        {
+            var lines = new List<string>();
+            lines.Add("Id||Title||Deadline");
+            foreach (var task in taskList)
+            {
+                lines.Add($"{task.id}||{task.title}||{task.deadline:dd/MM/yyyy}");
+            }
+
+            var context = string.Join(Environment.NewLine, lines);
+            File.WriteAllText(path, context);
+        }
 
         public void Delete(int taskID)
         {
             // how to find the task in the file?
             //id is unque but title may have numbers so look for ||| after the id
-            
-            var lines = File.ReadAllLines(path).ToList();
-            string? lineToDelete = null;
 
-            foreach (var line in lines)
-            {
-                string readID = line.Split("|||")[0];
+            Task? foundedTask = null;
+            // first approach
+            //foreach (var item in taskList)
+            //{
+            //    if(item.id == taskID)
+            //    {                     
+            //        Console.WriteLine("Found task to delete: " + item.title);
+            //        foundedTask = item;
+            //        break;
+            //    }
+            //}
 
-                if (readID == taskID.ToString())
-                {
-                    Console.WriteLine("Found line to delete: " + line);
-                    lineToDelete = line;
-                    break;
+            // second approach with linq
+            foundedTask = taskList.FirstOrDefault(item => item.id == taskID);
 
-                }
-            }
-
-            if (lineToDelete is null)
+            if (foundedTask is null)
             {
                 Console.WriteLine("Task with that ID does not exist");
                 return;
             }
             else
             {
-                lines.Remove(lineToDelete);
-                File.WriteAllLines(path, lines);
+                taskList.Remove(foundedTask);
+                SaveAllTasks();
             }
 
         }
 
-        public Task Get(int id)
+        /// <summary>
+        /// list all tasks or just get one by id?
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task? Get(int id) 
         {
-            throw new NotImplementedException();
-        }
-
-        public void Save(Task task)
-        {
-            string taskString = $"{task.id}|||{task.title}||{task.deadline:dd/MM/yyyy}\n";
-            File.AppendAllText(path, taskString);
-
+            return taskList.First(task => task.id == id);
         }
 
         public void Update(Task task)
         {
-            throw new NotImplementedException();
+            var updatedTask = taskList.FirstOrDefault(t => t.id == task.id);
+
+            ArgumentNullException.ThrowIfNull(updatedTask, "Task with that ID does not exist");
+
+            updatedTask.title = task.title;
+            updatedTask.deadline = task.deadline;
+            SaveAllTasks();
+
+            // update 5
+            // title
+            // value from console
+            /*
+            var t1 = Get(5);
+            if(t1 is null)
+            {
+                Console.WriteLine("Not found");
+            }
+
+            var command = Console.ReadLine();
+            
+
+            var newValue = Console.ReadLine();
+
+            if (command?.ToLowerInvariant() == "title")
+            {
+                t1.title = newValue;
+            }
+            else
+            {
+                t1.deadline = DateTime.Parse(newValue);
+            }
+
+            Update(t1);
+            */
+
+            /*
+
+            var lines = File.ReadAllLines(path).ToList();
+
+            foreach (var line in lines)
+            {
+                string readID = line.Split("|||")[0];
+
+                if (readID == task.id.ToString())
+                {
+                    Console.WriteLine("Found line to change: " + line);
+
+                    lines.Remove(line);
+                    File.WriteAllLines(path, lines);
+                    break;
+
+                }
+            }
+
+            switch (change)
+            {
+                case ("title"):
+                    {
+                        File.WriteAllText(path, $"{task.id}|||{newVal}||{task.deadline:dd/MM/yyyy}\n", Encoding.UTF8);
+                        File.WriteAllLines(path, lines);
+
+                        break;
+                    }
+                case ("deadline"):
+                    {
+                        File.WriteAllText(path, $"{task.id}|||{task.title}||{newVal:dd/MM/yyyy}\n", Encoding.UTF8);
+                        File.WriteAllLines(path, lines);
+
+                        break;
+                    }
+                default:
+                    Console.WriteLine("Invalid input");
+                    break;
+            }
+            */
+        }
+
+        public void Save(Task task)
+        {
+           taskList.Add(task);
+            SaveAllTasks();
         }
     }
 
