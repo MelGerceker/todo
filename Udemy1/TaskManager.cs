@@ -8,7 +8,6 @@ namespace Udemy1
     internal class TaskManager
     {
 
-        //public int idPointer = 1;
         private readonly ITodoRepository repo;
         private readonly string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "database.txt");
 
@@ -205,6 +204,7 @@ namespace Udemy1
         private readonly List<Task> taskList = [];
 
         private int idPointer = 1;
+        //NOTE: Can use GUID for ids too
 
         public TodoTxtRepository(string databaseFilePath)
         {
@@ -225,6 +225,12 @@ namespace Udemy1
                 var line = lines[i];
                 var splitLine = line.Split("||");
                 int id = int.Parse(splitLine[0]);
+
+                if (id > idPointer)
+                {
+                    idPointer = id+1;
+                }
+
                 string title = splitLine[1];
                 DateTime deadline = DateTime.Parse(splitLine[2]);
                 taskList.Add(new Task(title, deadline, id));
@@ -247,6 +253,10 @@ namespace Udemy1
             File.WriteAllText(path, context);
         }
 
+        /// <summary>
+        /// Uses taskID to find the task to be deleted in taskList. Removes found task and calls SaveAllTasks().
+        /// </summary>
+        /// <param name="taskID">ID of task to be deleted</param>
         public void Delete(int taskID)
         {
 
@@ -254,6 +264,7 @@ namespace Udemy1
 
             //approach with linq
             foundedTask = taskList.FirstOrDefault(item => item.id == taskID);
+            //TODO: can use Get() instead but then would i still need to implement the error?
 
             if (foundedTask is null)
             {
@@ -268,7 +279,6 @@ namespace Udemy1
             }
 
         }
-
 
         public Task? Get(int id)
         {
@@ -289,9 +299,9 @@ namespace Udemy1
 
         }
 
-        //TODO: idPointer not saved when program finishes exe.
         public void Save(Task task)
         {
+            
             task.id = idPointer;
             taskList.Add(task);
             idPointer++;
